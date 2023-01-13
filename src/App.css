@@ -1,0 +1,15 @@
+.cartbtn {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+}
+.modalheader{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ;
+    justify-content: baseline;
+}
+.cardimg{
+    display: block;
+    height: 80px;
+    width: 50px;
+    object-fit: contain;
+}

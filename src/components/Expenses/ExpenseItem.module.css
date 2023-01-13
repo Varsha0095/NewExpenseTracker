@@ -1,0 +1,43 @@
+.table {
+    background-color: gainsboro;
+    margin: 3rem auto;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: bold;
+    font-size: large;
+    color: navy;
+    text-align: center;
+    width: 85%;
+}
+.table th{
+    text-decoration: underline;
+    font-weight: bold;
+}
+/* .table button {
+    padding: 2px;
+} */
+
+.buttonDel {
+    color: red;
+    border-radius: 4px 4px 4px 4px;
+    border: 2px solid red;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+.buttonDel:hover{
+    background-color: red;
+    color: white;
+    border: 3px solid white;
+    font-weight: bold;    
+}
+.buttonEdit{
+    color: blue;
+    border-radius: 2px 2px 2px 2px;
+    border: 2px solid blue;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    /* padding-left: 5px; */
+}
+.buttonEdit:hover{
+    background-color: blue;
+    color: white;
+    border: 3px solid white;
+    font-weight: bold;
+}
