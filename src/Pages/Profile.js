@@ -4,31 +4,41 @@ import { NavLink } from "react-router-dom";
 import classes from "./Profile.module.css";
 import AuthContext from "../Store/auth-context";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { authAction } from "../reduxStore/AuthReducer";
 
 const Profile = () => {
-  const authCtx = useContext(AuthContext);
+  // const authCtx = useContext(AuthContext);
+  const dispatch = useDispatch();
+  const fullName = useSelector((state) => state.auth.fullName);
+  const profilePhoto = useSelector((state) => state.auth.profilePhoto);
+  const token = useSelector((state) => state.auth.token);
 
-  const fullnameInputRef = useRef();
-  const photoInputRef = useRef();
+  const fullNameRef = useRef();
+  const profileUrlRef = useRef();
       
       const updateProfileUrl = "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDSVbdJioXJIrQNGGXzqqS2drVffVyOMmQ";
 
   const profileUpdateHandler = (event) => {
     event.preventDefault();
 
-    const enteredFullname = fullnameInputRef.current.value;
-    const enteredPhotoUrl = photoInputRef.current.value;
+    const fullName = fullNameRef.current.value;
+    const profileUrl = profileUrlRef.current.value;
 
     axios
     .post(updateProfileUrl, {
-          idToken: authCtx.token,
-          displayName: enteredFullname,
-          photoUrl: enteredPhotoUrl,
+          // idToken: authCtx.token,
+          idToken: token,
+          displayName: fullName,
+          photoUrl: profileUrl,
           returnSecureToken: true,
         })
       .then((res) => {
         console.log(res.data);
         alert("Profile Updated");
+        dispatch(
+          authAction.updateProfile({name: fullName, profileUrl: profileUrl})
+        )
       })
       .catch((error) => {
         alert(error.message);
@@ -36,13 +46,13 @@ const Profile = () => {
   };
 
     axios.post('https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDSVbdJioXJIrQNGGXzqqS2drVffVyOMmQ',{
-    idToken: authCtx.token
+    idToken: token
   })
   .then((res) => {
      console.log(res);
      const user = res.data.users[0]
-     fullnameInputRef.current.value = user.displayName;
-     photoInputRef.current.value = user.photoUrl;
+     fullNameRef.current.value = user.displayName;
+     profileUrlRef.current.value = user.photoUrl;
   })
 
   return (
@@ -73,11 +83,11 @@ const Profile = () => {
         <Row>
           <Col className={classes.control}>
             <label htmlFor="name">Full Name:</label>
-            <input id="name" type="text" ref={fullnameInputRef} />
+            <input id="name" type="text" ref={fullNameRef} />
           </Col>
           <Col className={classes.control}>
             <label htmlFor="photo">Profile Photo URL</label>
-            <input id="photo" type="text" ref={photoInputRef} />
+            <input id="photo" type="text" ref={profileUrlRef} />
           </Col>
         </Row>
         <Row>

@@ -1,15 +1,30 @@
 import React, { useContext } from "react";
 import { Col, Row } from "react-bootstrap";
-import { NavLink, Link } from "react-router-dom";
-import AuthContext from "../Store/auth-context";
+import { NavLink, Link, useNavigate } from "react-router-dom";
+// import AuthContext from "../Store/auth-context";
 import classes from "./Welcome.module.css";
 import ExpenseForm from "../components/Expenses/ExpenseForm";
+import { useDispatch, useSelector } from "react-redux";
+import { authAction } from "../reduxStore/AuthReducer";
 
 const Welcome = () => {
-    const authCtx = useContext(AuthContext);
+    // const authCtx = useContext(AuthContext);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedin);
+    const token = useSelector((state) => state.auth.token);
+    const fullName = useSelector((state) => state.auth.fullName);
+    const profilePhoto = useSelector((state) => state.auth.profilePhoto);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const logoutHandler = () => {
-        authCtx.logout();
+        // authCtx.logout();
+        dispatch(authAction.updateAuthInfo({token: "", email:""}));
+        localStorage.removeItem("exp_token");
+        localStorage.removeItem("exp_email");
+        localStorage.removeItem("email_token");
+        localStorage.removeItem("expense_token");
+        
+
     }
 
     const verifyEmailHandler = () => {
@@ -18,7 +33,8 @@ const Welcome = () => {
             {
                 method: 'POST',
                 body: JSON.stringify({
-                    idToken: authCtx.token,
+                    // idToken: authCtx.token,
+                    idToken: token,
                     requestType: "VERIFY_EMAIL",
                 }),
                 headers: {
@@ -51,7 +67,7 @@ const Welcome = () => {
           </Row>
         </section>
         <ExpenseForm />
-      {authCtx.isLoggedIn && <button className={classes.button1} onClick={logoutHandler}>Logout</button>}
+      {isLoggedIn && <button className={classes.button1} onClick={logoutHandler}>Logout</button>}
       <div>
       <button className={classes.button2} onClick={verifyEmailHandler}>Verify Email</button>
       </div>

@@ -14,21 +14,30 @@ import "../node_modules/react-bootstrap/dist/react-bootstrap";
 import "../node_modules/bootstrap/dist/css/bootstrap.css";
 
 import { BrowserRouter } from 'react-router-dom';
-import { AuthContextProvider } from './Store/auth-context';
-import ExpenseContextProvider from './Store/ExpenseContextProvider';
-// import { Provider } from 'react-redux';
-// import store from '../src/store/index';
+// import { AuthContextProvider } from './Store/auth-context';
+// import ExpenseContextProvider from './Store/ExpenseContextProvider';
+
+import { Provider } from 'react-redux';
+import store from '../src/reduxStore/index';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-  <AuthContextProvider>
-    <ExpenseContextProvider>
-    <BrowserRouter>
-    <App />
-    </BrowserRouter>
-    </ExpenseContextProvider>
-   </AuthContextProvider>
+  // <AuthContextProvider>
+  //   <ExpenseContextProvider>
+  //   <BrowserRouter>
+  //   <App />
+  //   </BrowserRouter>
+  //   </ExpenseContextProvider>
+  //  </AuthContextProvider>
   // </React.StrictMode>
+
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>
+
 );
 
 // If you want to start measuring performance in your app, pass a function

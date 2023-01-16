@@ -1,46 +1,73 @@
 import { useContext, useRef, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import classes from "./ExpenseForm.module.css";
-import ExpenseItem from "./ExpenseItem";
-import ExpContext from "../../Store/expense-context";
+import ExpenseList from "./ExpenseList";
+// import ExpContext from "../../Store/expense-context";
+import { useSelector, useDispatch } from "react-redux";
+import axios from "axios";
+import { expenseAction } from "../../reduxStore/ExpenseReducer";
 
 const ExpenseForm = (props) => {
-  const expCtx = useContext(ExpContext);
+  // const expCtx = useContext(ExpContext);
+  const url = `https://expense-tracker-b43a5-default-rtdb.firebaseio.com`;
+  const updateUrl = `https://expense-tracker-b43a5-default-rtdb.firebaseio.com`;
+
+  const dispatch = useDispatch();
+  const expenseList = useSelector((state) => state.expense.expenseList);
+  console.log(expenseList);
+
   const expenseAmountInputRef = useRef();
   const expenseDescriptionInputRef = useRef();
   const expenseCategoryInputRef = useRef();
-
-  const [expenses, setExpenses] = useState([]);
-
-  const addExpenseHandler = (event) => {
+  const [isEditing, setIsEditing] = useState();
+  // const [expenses, setExpenses] = useState([]);
+  const submitExpenseHandler = async(event) => {
     event.preventDefault();
-    expCtx.addExpense({
-      id: expenses.id,
+    const expObj = {
       amount: expenseAmountInputRef.current.value,
       description: expenseDescriptionInputRef.current.value,
       category: expenseCategoryInputRef.current.value,
-    })
-}
-  
-  const editExpenseHandler = (expense) => {
-    // event.preventDefault();
-    console.log(expense);
-    console.log(expenses);
-    expenseAmountInputRef.current.value = expense.amount
-    expenseDescriptionInputRef.current.value = expense.description
-    expenseCategoryInputRef.current.value = expense.category
-    expCtx.updateExpense({
-      id: expense.id,
-      amount: expenseAmountInputRef.current.value,
-      description: expenseDescriptionInputRef.current.value,
-      category: expenseCategoryInputRef.current.value,
-    });
-    setExpenses([...expenses, expense]);
+    };
+    const res = await axios.post(`${url}/expense.json`, expObj);
+    console.log("res",res);
+
+    if(res.status === 200){
+      alert("Expense stored in database successfully");
+      const expense = {
+        id: res.data.name,
+        ...expObj,
+      };
+      dispatch(expenseAction.addExpense(expense));
+    }else{
+      alert("Error while storing expense details");
+    }
+  };
+
+  const editExpense = (expense) => {
+    expenseAmountInputRef.current.value = expense.amount;
+    expenseDescriptionInputRef.current.value = expense.category;
+    setIsEditing(expense.id);
+  };
+  const editExpenseHandler = async(event) => {
+    event.preventDefault();
+      const expObj = {
+        id: isEditing,
+        amount: expenseAmountInputRef.current.value,
+        description: expenseDescriptionInputRef.current.value,
+        category: expenseCategoryInputRef.current.value,
+      };
+      const res = await axios.put(
+        `${updateUrl}/expense/${expObj.id}.json`,
+        expObj
+      )
+      if(res.status === 200) console.log('expense edited successfully');
+      dispatch(expenseAction.addExpense(expObj));
+      setIsEditing(false);
   };
 
   return (
     <section>
-      <form onSubmit={addExpenseHandler} className={classes.form}>
+      <form className={classes.form}>
         <Row className={classes.control}>
           <Col>
             <label htmlFor="amount">Expense Amount:</label>
@@ -75,15 +102,13 @@ const ExpenseForm = (props) => {
           </Col>
         </Row>
         <div className={classes.actions}>
-          <button>Add Expense</button>
+          {!isEditing && <button onClick={submitExpenseHandler}>Add Expense</button>}
+          {isEditing && <button onClick={editExpenseHandler}>Update Expense</button>}
         </div>
       </form>
 
       <Col>
-        <ExpenseItem expenses={expenses} onEdit={editExpenseHandler} />
-      </Col>
-      <Col>
-        {expenses.length < 1 && <div>No expenses are added Yet !!</div>}
+        <ExpenseList expenses={expenseList} editExpense={editExpense} />
       </Col>
     </section>
   );
@@ -92,94 +117,29 @@ const ExpenseForm = (props) => {
 export default ExpenseForm;
 
 
-    // const amount = expenseAmountInputRef.current.value;
-    // const description = expenseDescriptionInputRef.current.value;
-    // const category = expenseCategoryInputRef.current.value;
+//   const addExpenseHandler = (event) => {
+//     event.preventDefault();
+//     expCtx.addExpense({
+//       id: expenses.id,
+//       amount: expenseAmountInputRef.current.value,
+//       description: expenseDescriptionInputRef.current.value,
+//       category: expenseCategoryInputRef.current.value,
+//     })
+// }
+  
+//   const editExpenseHandler = (expense) => {
+//     // event.preventDefault();
+//     console.log(expense);
+//     console.log(expenses);
+//     expenseAmountInputRef.current.value = expense.amount
+//     expenseDescriptionInputRef.current.value = expense.description
+//     expenseCategoryInputRef.current.value = expense.category
+//     expCtx.updateExpense({
+//       id: expense.id,
+//       amount: expenseAmountInputRef.current.value,
+//       description: expenseDescriptionInputRef.current.value,
+//       category: expenseCategoryInputRef.current.value,
+//     });
+//     setExpenses([...expenses, expense]);
+//   };
 
-
-    // const newArr = [...expenses];
-    // let expenseObj = {
-    //   amount,
-    //   description,
-    //   category,
-    // };
-    // // setExpenses([...expenses, expenseObj]);
-    // // let email = localStorage.getItem('email');
-    // let email = authCtx.email;
-    // let mail = email.replace("@", "").replace(".", "");
-    // try{
-    //     const res = await axios.post(
-    //         `https://expense-tracker-b43a5-default-rtdb.firebaseio.com/expenses/${mail}.json`,
-    //         expenseObj
-    //       );
-    //       console.log("res", res);
-    //       if (res.status === 200) {
-    //         console.log("Expense stored in database");
-    //           setExpenses([...expenses, res])
-    //         const expense = {
-    //           id: res.data.name,
-    //           ...expenseObj,
-    //         };
-    //         console.log(expense);
-    //     }
-    // }catch(error){
-    //     console.log(error);
-    // }
-    // const res = await axios.post(
-    //   `https://expense-tracker-b43a5-default-rtdb.firebaseio.com/expenses/${mail}.json`,
-    //   expenseObj
-    // );
-    // console.log("res", res);
-    // if (res.status === 200) {
-    //   alert("Expense stored in database");
-    //     setExpenses([...expenses, res])
-    //   const expense = {
-    //     id: res.data.name,
-    //     ...expenseObj,
-    //   };
-    //   console.log(expense);
-    // } else {
-    //   console.log("something went wrong");
-
-      // expenseAmountInputRef.current.value = expense.amount;
-    // expenseDescriptionInputRef.current.value = expense.description;
-    // // expenseCategoryInputRef.current.value = expense.category;
-    // let expenseObj = {
-    //   id: IsEditing,
-    //   amount: expenseAmountInputRef.current.value,
-    //   description: expenseDescriptionInputRef.current.value,
-    //   category: expenseCategoryInputRef.current.value,
-    // };
-    // let email = authCtx.email;
-    // let mail = email.replace("@", "").replace(".", "");
-    // const res = await axios.put(
-    //   `https://expense-tracker-b43a5-default-rtdb.firebaseio.com/expenses/${mail}/${expenseObj.id}.json`,
-    //   expenseObj
-    // );
-    // if (res.status === 200)
-    //   console.log("expense edited successfully", res.data);
-    // setExpenses([...expenses, expenseObj]);
-    // setIsEditing(false);
-
-    
-  // .then((res) => {
-  //     console.log('edited expense', res);
-  //     const data = res.data;
-  //     console.log(data);
-  //     expenseAmountInputRef.current.value = data.amount;
-  //     expenseDescriptionInputRef.current.value = data.description;
-  //     expenseCategoryInputRef.current.value = data.category;
-  // }).catch((err) => {
-  //     console.log('could not edit expense');
-  // })
-  // axios.get('https://expense-tracker-b43a5-default-rtdb.firebaseio.com/.json').then((res) => {
-  //     console.log('Fetched Data', res.data);
-  // })
-  // useEffect(() => {
-  //     localStorage.setItem('expenses', JSON.stringify(expenses))
-  //     axios.get('https://expense-tracker-b43a5-default-rtdb.firebaseio.com/.json',{
-  //         expenses
-  //     }).then((res) => {
-  //         console.log('Fetched Data', res.data);
-  //     })
-  // },[expenses])

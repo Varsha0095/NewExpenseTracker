@@ -2,7 +2,7 @@
 const PremiumFeatures = () => {
     return(
         <div>
-            Hello
+           <button>Activate Premium</button>
         </div>
     )
 };
