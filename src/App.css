@@ -13,3 +13,11 @@
     width: 50px;
     object-fit: contain;
 }
+.dark-theme {
+    background-color: rgb(34, 31, 31);
+    color: rgb(189, 173, 173);
+}
+.light-theme {
+    background-color: white;
+    color: black;
+}

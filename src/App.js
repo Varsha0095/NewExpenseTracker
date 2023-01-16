@@ -14,6 +14,7 @@ import axios from "axios";
 import { Fragment, useEffect } from "react";
 
 const App = () => {
+  const theme = useSelector((state) => state.theme.theme);
   const url = `https://expense-tracker-b43a5-default-rtdb.firebaseio.com`;
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedin);
@@ -85,8 +86,11 @@ const App = () => {
     getData();
   }, []);
   // const authCtx = useContext(AuthContext);
+  let themeClass;
+  if(theme === "dark") document.body.className = "dark-theme";
+  else document.body.className = "light-theme";
   return (
-    <>
+    <div className="app">
       <Routes>
         {isLoggedIn && (
           <Fragment>
@@ -109,7 +113,7 @@ const App = () => {
         {isLoggedIn && <Route path="/" element={<Login />} />}
         <Route path="*" element={<p>Page not found</p>} />
       </Routes>
-    </>
+    </div>
   );
 };
 export default App;
