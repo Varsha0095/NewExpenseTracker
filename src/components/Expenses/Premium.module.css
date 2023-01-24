@@ -1,0 +1,19 @@
+.premium {
+    background-color: gold;
+    color: black;
+    border: 3px solid black;
+    height: 50px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 800;
+    font-size: large;
+    margin-left: 10px;
+}
+.premium:hover {
+    background-color: black;
+    border: 3px solid gold;
+    color: gold;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 800;
+    font-size: large;
+    margin-left: 10px;
+}

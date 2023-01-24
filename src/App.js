@@ -1,12 +1,12 @@
 // import React, { useContext } from "react";
-import { Switch, Redirect, Routes, Navigate } from "react-router-dom";
+import { Routes, Navigate } from "react-router-dom";
 import { Route } from "react-router-dom";
 import Login from "./components/Login/Login";
 import Welcome from "./Pages/Welcome";
 // import AuthContext from "./Store/auth-context";
 import Profile from "./Pages/Profile";
 import ForgotPassword from "./Pages/ForgotPassword";
-
+import "./App.css";
 import { authAction } from "./reduxStore/AuthReducer";
 import { expenseAction } from "./reduxStore/ExpenseReducer";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,6 +14,8 @@ import axios from "axios";
 import { Fragment, useEffect } from "react";
 
 const App = () => {
+  // let usermail = localStorage.getItem('exp_email');
+  // let mail = usermail.replace('@','').replace('.','');
   const theme = useSelector((state) => state.theme.theme);
   const url = `https://expense-tracker-b43a5-default-rtdb.firebaseio.com`;
   const dispatch = useDispatch();
@@ -26,7 +28,7 @@ const App = () => {
     if (token) {
       dispatch(authAction.updateAuthInfo({ token, email }));
     }
-  }, [token, email]);
+  }, [token, email, dispatch]);
 
   const getProfileUrl = `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDSVbdJioXJIrQNGGXzqqS2drVffVyOMmQ`;
   useEffect(() => {
@@ -52,7 +54,7 @@ const App = () => {
       }
     }
     fetchProfile();
-  }, [token]);
+  }, [token,dispatch,getProfileUrl]);
 
   useEffect(() => {
     const getData = async() => {
@@ -84,20 +86,20 @@ const App = () => {
       }
     }
     getData();
-  }, []);
+  }, [url,dispatch]);
   // const authCtx = useContext(AuthContext);
-  let themeClass;
+  // let themeClass;
   if(theme === "dark") document.body.className = "dark-theme";
   else document.body.className = "light-theme";
   return (
-    <div className="app">
+    <div className="App">
       <Routes>
         {isLoggedIn && (
           <Fragment>
             <Route
               path="/"
-              element={<Welcome />} 
-              // element={<Navigate to="/welcome" replace={true} />}
+              // element={<Welcome />} 
+              element={<Navigate to="/welcome" replace={true} />}
             />
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/profile" element={<Profile />} />

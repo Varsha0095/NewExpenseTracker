@@ -1,15 +1,14 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 // import AuthContext from "../../Store/auth-context";
 import classes from "./Login.module.css";
-import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { authAction } from "../../reduxStore/AuthReducer";
 
 const Login = () => {
   // const authCtx = useContext(AuthContext);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const [isLogin, setIsLogin] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -86,7 +85,7 @@ const Login = () => {
           alert("User authenticated successfully");
 
           const data = await res.json();
-          console.log("auth token: ", data.idToken);
+          // console.log("auth token: ", data.idToken);
 
           dispatch(
             authAction.updateAuthInfo({

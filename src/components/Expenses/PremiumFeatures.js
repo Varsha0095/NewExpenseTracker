@@ -1,7 +1,8 @@
 import { themeAction } from "../../reduxStore/Theme";
-import { useDispatch, useSelector } from "react-redux";
-import { useState, useEffect, Fragment } from "react";
+import { useDispatch } from "react-redux";
+import { useState, Fragment } from "react";
 import { Button } from "react-bootstrap";
+import classes from './Premium.module.css';
 
 const PremiumFeatures = (props) => {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const PremiumFeatures = (props) => {
   return (
     <Fragment>
       <div>
-        <button onClick={onClickHandler}>Activate Premium</button>
+        <button onClick={onClickHandler} className={classes.premium}>Activate Premium</button>
       </div>
       {isPremium && (
         <a

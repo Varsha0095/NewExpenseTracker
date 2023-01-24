@@ -1,4 +1,4 @@
-.cartbtn {
+/* .cartbtn {
     position: absolute;
     top: 20px;
     right: 30px;
@@ -12,7 +12,29 @@
     height: 80px;
     width: 50px;
     object-fit: contain;
-}
+} */
+.App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+  }
+  .App-link {
+    color: #61dafb;
+  }
+  @keyframes App-logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
 .dark-theme {
     background-color: rgb(34, 31, 31);
     color: rgb(189, 173, 173);

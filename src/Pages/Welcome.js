@@ -1,6 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Col, Row } from "react-bootstrap";
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 // import AuthContext from "../Store/auth-context";
 import classes from "./Welcome.module.css";
 import ExpenseForm from "../components/Expenses/ExpenseForm";
@@ -11,10 +11,10 @@ const Welcome = () => {
     // const authCtx = useContext(AuthContext);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedin);
     const token = useSelector((state) => state.auth.token);
-    const fullName = useSelector((state) => state.auth.fullName);
-    const profilePhoto = useSelector((state) => state.auth.profilePhoto);
+    // const fullName = useSelector((state) => state.auth.fullName);
+    // const profilePhoto = useSelector((state) => state.auth.profilePhoto);
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     const logoutHandler = () => {
         // authCtx.logout();

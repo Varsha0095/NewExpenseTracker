@@ -1,12 +1,15 @@
 import { useDispatch } from "react-redux";
 import { expenseAction } from "../../reduxStore/ExpenseReducer";
 import axios from "axios";
-import { Button, Container } from "react-bootstrap";
+import { Container } from "react-bootstrap";
+import classes from './ExpenseItem.module.css';
 
 const ExpenseItem = (props) => {
+  // let email = localStorage.getItem('exp_email');
+  // let mail = email.replace('@','').replace('.','');
   const dispatch = useDispatch();
 
-  const url = 'https://expense-tracker-b43a5-default-rtdb.firebaseio.com';
+  const url = `https://expense-tracker-b43a5-default-rtdb.firebaseio.com`;
    
   const removeExpense = async() => {
     const res = await axios.delete(`${url}/expense/${props.expense.id}.json`);
@@ -22,8 +25,7 @@ const ExpenseItem = (props) => {
   return(
     <Container 
       style={{display: "flex", border: "4px solid grey", width: "400px"}}>
-        <div
-        style={{marginBottom: "5px"}}>
+        <div className={classes.list}>
           Amount: ${props.expense.amount}
           <br />
           Description: {props.expense.description}
@@ -32,10 +34,10 @@ const ExpenseItem = (props) => {
           <br />
         </div>
         <div>
-          <Button variant="warning" style={{margin: "4px auto"}} onClick={editExpense}>Edit</Button>
+          <button className={classes.buttonEdit} onClick={editExpense}>Edit</button>
           </div>
           <div>
-          <Button variant="danger" onClick={removeExpense}>Delete</Button>
+          <button className={classes.buttonDel} onClick={removeExpense}>Delete</button>
         </div>
       </Container>
   )

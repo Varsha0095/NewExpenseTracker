@@ -1,8 +1,8 @@
-import { useContext, useRef } from "react";
+import { useRef } from "react";
 import { Col, Row } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import classes from "./Profile.module.css";
-import AuthContext from "../Store/auth-context";
+// import AuthContext from "../Store/auth-context";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { authAction } from "../reduxStore/AuthReducer";
@@ -10,8 +10,8 @@ import { authAction } from "../reduxStore/AuthReducer";
 const Profile = () => {
   // const authCtx = useContext(AuthContext);
   const dispatch = useDispatch();
-  const fullName = useSelector((state) => state.auth.fullName);
-  const profilePhoto = useSelector((state) => state.auth.profilePhoto);
+  // const fullName = useSelector((state) => state.auth.fullName);
+  // const profilePhoto = useSelector((state) => state.auth.profilePhoto);
   const token = useSelector((state) => state.auth.token);
 
   const fullNameRef = useRef();

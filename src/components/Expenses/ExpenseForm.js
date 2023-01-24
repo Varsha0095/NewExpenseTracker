@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Row, Col } from "react-bootstrap";
 import classes from "./ExpenseForm.module.css";
 import ExpenseList from "./ExpenseList";
@@ -9,6 +9,8 @@ import { expenseAction } from "../../reduxStore/ExpenseReducer";
 
 const ExpenseForm = (props) => {
   // const expCtx = useContext(ExpContext);
+  // let email = localStorage.getItem('exp_email');
+  // let mail = email.replace('@','').replace('.','');
   const url = `https://expense-tracker-b43a5-default-rtdb.firebaseio.com`;
   const updateUrl = `https://expense-tracker-b43a5-default-rtdb.firebaseio.com`;
 
